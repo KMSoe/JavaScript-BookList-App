@@ -65,7 +65,11 @@ class Store{
         localStorage.setItem('books',JSON.stringify(bookList));
     }
     static deleteBook(isbn){
-        
+        let bookList=Store.getBooks();
+        bookList=bookList.filter((book)=>{
+            return isbn !== book.isbn;
+        });
+        localStorage.setItem('books',JSON.stringify(bookList));
     }
 }
 
@@ -102,7 +106,8 @@ UI.form.addEventListener('submit',(e)=>{
 UI.bookList.addEventListener('click',(e)=>{
     e.preventDefault();
     const element=e.target;
-    console.log(element);
+    const isbn=element.parentElement.previousElementSibling.textContent;
     UI.removeBook(element);
+    Store.deleteBook(isbn);
 
 });
