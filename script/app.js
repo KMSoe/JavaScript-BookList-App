@@ -10,6 +10,7 @@ class Book{
 
 //UI Class: Handle UI Tasks
 class UI{
+    static container=document.querySelector('.container');
     static bookList=document.querySelector('#bookList');
     static form=document.querySelector('#form');
     static title=document.querySelector('#title');
@@ -43,7 +44,12 @@ class UI{
         this.isbn.value='';
     }
     static showAlert(className,message){
-
+        const div=document.createElement('div');
+        div.className=`alert alert-${className} text-center`;
+        div.appendChild(document.createTextNode(message));
+        UI.container.insertBefore(div,UI.form);
+        //for timer
+        setTimeout(()=>document.querySelector('.alert').remove(),2000)
     }
 }
 
@@ -89,7 +95,7 @@ UI.form.addEventListener('submit',(e)=>{
     const isbn=UI.isbn.value;
 
     if(title==='' && author==='' && isbn===''){
-
+        UI.showAlert('danger','Input all Fields!!!');
     }else{
         const book=new Book(UI.title.value,UI.author.value,UI.isbn.value);
 
@@ -98,6 +104,8 @@ UI.form.addEventListener('submit',(e)=>{
         Store.storeBook(book);
 
         UI.clearFields();
+
+        UI.showAlert('success','Book added');
     }
     
 });
@@ -109,5 +117,5 @@ UI.bookList.addEventListener('click',(e)=>{
     const isbn=element.parentElement.previousElementSibling.textContent;
     UI.removeBook(element);
     Store.deleteBook(isbn);
-
+    UI.showAlert('danger',"Book removed.")
 });
